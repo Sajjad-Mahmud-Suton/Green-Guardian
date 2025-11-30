@@ -1,4 +1,5 @@
 import { Navbar } from './Navbar';
+import { useEffect, useState } from 'react';
 import { 
   Mail, 
   Phone, 
@@ -43,6 +44,14 @@ const attendanceData = [
 ];
 
 export function StudentProfile() {
+  const [user, setUser] = useState<any | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('gg_user');
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#1E293B]">
       <Navbar />
@@ -62,8 +71,12 @@ export function StudentProfile() {
               <div className="flex flex-col items-center gap-4">
                 <div className="relative group">
                   <Avatar className="w-32 h-32">
-                    <AvatarImage src="https://images.unsplash.com/photo-1600178572204-6ac8886aae63?w=200" />
-                    <AvatarFallback>JS</AvatarFallback>
+                    {user?.avatar ? (
+                      <AvatarImage src={user.avatar} />
+                    ) : (
+                      <AvatarImage src="https://images.unsplash.com/photo-1600178572204-6ac8886aae63?w=200" />
+                    )}
+                    <AvatarFallback>{user?.name ? user.name.split(' ').map((n:any)=>n[0]).slice(0,2).join('') : 'JS'}</AvatarFallback>
                   </Avatar>
                   <Button 
                     size="icon"
@@ -73,8 +86,8 @@ export function StudentProfile() {
                   </Button>
                 </div>
                 <div className="text-center">
-                  <h2 className="text-2xl mb-1">John Smith</h2>
-                  <p className="text-muted-foreground mb-2">Computer Science Student</p>
+                  <h2 className="text-2xl mb-1">{user?.name ?? 'John Smith'}</h2>
+                  <p className="text-muted-foreground mb-2">{user?.department ? `${user.department} Student` : 'Computer Science Student'}</p>
                   <Badge className="bg-green-100 text-green-700 dark:bg-green-950/30 dark:text-green-400">
                     Active
                   </Badge>
@@ -90,7 +103,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Student ID</p>
-                      <p className="font-mono">STU2024</p>
+                      <p className="font-mono">{user?.id ?? 'STU2024'}</p>
                     </div>
                   </div>
 
@@ -100,7 +113,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Department</p>
-                      <p>Computer Science & Engineering</p>
+                      <p>{user?.department ?? 'Computer Science & Engineering'}</p>
                     </div>
                   </div>
 
@@ -110,7 +123,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Batch / Semester</p>
-                      <p>2024 Batch • 2nd Semester</p>
+                      <p>{user?.batch ?? '2024 Batch'} • {user?.semester ?? '2nd Semester'}</p>
                     </div>
                   </div>
 
@@ -120,7 +133,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Campus</p>
-                      <p>Main Campus, Building A</p>
+                      <p>{user?.campus ?? 'Main Campus, Building A'}</p>
                     </div>
                   </div>
                 </div>
@@ -132,7 +145,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Email Address</p>
-                      <p>john.smith@university.edu</p>
+                      <p>{user?.email ?? 'john.smith@university.edu'}</p>
                     </div>
                   </div>
 
@@ -142,7 +155,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Phone Number</p>
-                      <p>+1 (555) 123-4567</p>
+                      <p>{user?.phone ?? '+1 (555) 123-4567'}</p>
                     </div>
                   </div>
 
@@ -152,7 +165,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Date of Birth</p>
-                      <p>January 15, 2002</p>
+                      <p>{user?.dob ? new Date(user.dob).toLocaleDateString() : 'January 15, 2002'}</p>
                     </div>
                   </div>
 
@@ -162,7 +175,7 @@ export function StudentProfile() {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Enrollment Date</p>
-                      <p>August 20, 2023</p>
+                      <p>{user?.enrollmentDate ? new Date(user.enrollmentDate).toLocaleDateString() : 'August 20, 2023'}</p>
                     </div>
                   </div>
                 </div>

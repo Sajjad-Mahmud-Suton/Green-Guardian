@@ -16,10 +16,15 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDark, setIsDark] = useState(false);
+  const [user, setUser] = useState<any | null>(null);
 
   useEffect(() => {
     const isDarkMode = document.documentElement.classList.contains('dark');
     setIsDark(isDarkMode);
+    try {
+      const raw = sessionStorage.getItem('gg_user');
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
   }, []);
 
   const toggleTheme = () => {
@@ -93,16 +98,20 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                   <Avatar>
-                    <AvatarImage src="https://images.unsplash.com/photo-1600178572204-6ac8886aae63?w=100" />
-                    <AvatarFallback>JS</AvatarFallback>
+                    {user?.avatar ? (
+                      <AvatarImage src={user.avatar} />
+                    ) : (
+                      <AvatarImage src="https://images.unsplash.com/photo-1600178572204-6ac8886aae63?w=100" />
+                    )}
+                    <AvatarFallback>{user?.name ? user.name.split(' ').map(n=>n[0]).slice(0,2).join('') : 'JS'}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p>John Smith</p>
-                    <p className="text-xs text-muted-foreground">STU2024</p>
+                    <p>{user?.name ?? 'John Smith'}</p>
+                    <p className="text-xs text-muted-foreground">{user?.id ?? 'STU2024'}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

@@ -1,4 +1,5 @@
 import { Navbar } from './Navbar';
+import { useEffect, useState } from 'react';
 import { DigitalTimer } from './DigitalTimer';
 import { BehaviorScore } from './BehaviorScore';
 import { 
@@ -80,6 +81,29 @@ const notices = [
 
 export function Dashboard() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('gg_user');
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  const getShortName = (fullName: string | undefined) => {
+    if (!fullName) return 'Student';
+    const skip = ['md', 'md.', 'm', 'm.', 'mr', 'mr.', 'mrs', 'mrs.', 'dr', 'dr.', 'prof', 'prof.'];
+    const parts = fullName.split(/\s+/).map(p => p.replace(/[^A-Za-z\.]/g, '').toLowerCase());
+    for (let i = 0; i < parts.length; i++) {
+      if (!skip.includes(parts[i]) && parts[i].length > 0) {
+        // return capitalized
+        const raw = fullName.split(/\s+/)[i];
+        return raw.replace(/[^A-Za-z]/g, '').replace(/^[a-z]/, c => c.toUpperCase());
+      }
+    }
+    // fallback to first token
+    return fullName.split(/\s+/)[0];
+  };
   const nextExamDate = new Date();
   nextExamDate.setDate(nextExamDate.getDate() + 3);
   nextExamDate.setHours(10, 0, 0, 0);
@@ -122,7 +146,7 @@ export function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Welcome Section */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <h1 className="text-3xl mb-2">Welcome back, John! 👋</h1>
+          <h1 className="text-3xl mb-2">Welcome back, {user?.name ? `${getShortName(user.name)}! 👋` : 'John! 👋'}</h1>
           <p className="text-muted-foreground">Here's your academic performance overview</p>
         </div>
 

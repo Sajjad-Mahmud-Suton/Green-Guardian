@@ -1,4 +1,5 @@
 import { TeacherSidebar } from './TeacherSidebar';
+import { useEffect, useState } from 'react';
 import { 
   Users, 
   BookOpen, 
@@ -85,6 +86,14 @@ const recentExams = [
 
 export function TeacherDashboard() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('gg_user');
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
+  }, []);
 
   const stats = [
     {
@@ -139,7 +148,7 @@ export function TeacherDashboard() {
           {/* Header */}
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h1 className="text-3xl mb-2">Teacher Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, Dr. Sarah Evans</p>
+            <p className="text-muted-foreground">Welcome back, {user?.name ?? 'Dr. Sarah Evans'}</p>
           </div>
 
           {/* Stats */}

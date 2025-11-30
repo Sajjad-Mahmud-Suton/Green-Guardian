@@ -24,8 +24,37 @@ export function RoleLogin() {
     e.preventDefault();
     
     if (role === 'student' && userId === 'STU2024' && password === 'demo123') {
+      // temporary session-only student info (Bangladeshi sample)
+      const studentData = {
+        role: 'student',
+        name: 'Md. Arif Hossain',
+        id: 'STU2024',
+        department: 'Computer Science & Engineering',
+        batch: '2024 Batch',
+        semester: '2nd Semester',
+        campus: 'Main Campus, Building A',
+        email: 'arif.hossain@university.edu.bd',
+        phone: '+8801712345678',
+        dob: '2002-03-12',
+        enrollmentDate: '2023-08-20',
+        // male portrait for student demo
+        avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200'
+      };
+      try { sessionStorage.setItem('gg_user', JSON.stringify(studentData)); } catch {};
       navigate('/dashboard');
     } else if (role === 'teacher' && userId === 'TCH2024' && password === 'admin123') {
+      // temporary session-only teacher info (Bangladeshi sample)
+      const teacherData = {
+        role: 'teacher',
+        name: 'Dr. Afsana Rahman',
+        id: 'TCH2024',
+        title: 'Associate Professor',
+        department: 'Computer Science & Engineering',
+        email: 'afsana.rahman@university.edu.bd',
+        phone: '+8801912345678',
+        avatar: 'https://images.unsplash.com/photo-1545996124-1b6b9f0f8b0c?w=200'
+      };
+      try { sessionStorage.setItem('gg_user', JSON.stringify(teacherData)); } catch {};
       navigate('/teacher/dashboard');
     } else {
       setError('Invalid credentials');
