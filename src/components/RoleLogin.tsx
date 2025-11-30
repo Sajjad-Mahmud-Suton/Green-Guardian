@@ -46,13 +46,13 @@ export function RoleLogin() {
       // temporary session-only teacher info (Bangladeshi sample)
       const teacherData = {
         role: 'teacher',
-        name: 'Dr. Afsana Rahman',
+        name: 'Mr. Montaser Abdul Quader',
         id: 'TCH2024',
-        title: 'Associate Professor',
+        title: 'Senior Lecturer',
         department: 'Computer Science & Engineering',
-        email: 'afsana.rahman@university.edu.bd',
-        phone: '+8801912345678',
-        avatar: 'https://images.unsplash.com/photo-1545996124-1b6b9f0f8b0c?w=200'
+        email: 'montaser.quader@university.edu.bd',
+        phone: '+8801834567890',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200'
       };
       try { sessionStorage.setItem('gg_user', JSON.stringify(teacherData)); } catch {};
       navigate('/teacher/dashboard');

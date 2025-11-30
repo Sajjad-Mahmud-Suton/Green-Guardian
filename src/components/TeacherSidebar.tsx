@@ -25,10 +25,15 @@ export function TeacherSidebar({ activePage }: TeacherSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDark, setIsDark] = useState(false);
+  const [user, setUser] = useState<any | null>(null);
 
   useEffect(() => {
     const isDarkMode = document.documentElement.classList.contains('dark');
     setIsDark(isDarkMode);
+    try {
+      const raw = sessionStorage.getItem('gg_user');
+      if (raw) setUser(JSON.parse(raw));
+    } catch {}
   }, []);
 
   const toggleTheme = () => {
@@ -72,12 +77,16 @@ export function TeacherSidebar({ activePage }: TeacherSidebarProps) {
       <div className="p-4 border-b border-gray-700">
         <div className="flex items-center gap-3">
           <Avatar className="w-12 h-12">
-            <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" />
-            <AvatarFallback>Dr. SE</AvatarFallback>
+            {user?.avatar ? (
+              <AvatarImage src={user.avatar} />
+            ) : (
+              <AvatarImage src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" />
+            )}
+            <AvatarFallback>{user?.name ? user.name.split(' ').map((n:any)=>n[0]).slice(0,2).join('') : 'SE'}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="truncate">Dr. Sarah Evans</p>
-            <p className="text-xs text-gray-400 truncate">Computer Science</p>
+            <p className="truncate">{user?.name ?? 'Dr. Sarah Evans'}</p>
+            <p className="text-xs text-gray-400 truncate">{user?.department ?? 'Computer Science'}</p>
           </div>
         </div>
       </div>
